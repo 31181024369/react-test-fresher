@@ -10,6 +10,7 @@ import Contact from './pages/contact';
 import Footed from './components/footed';
 import Header from './components/header';
 import Home from './components/home';
+import RegisterPage from './pages/register';
 const Layout=()=>{
   return (
     <div className='layout-app'>
@@ -36,6 +37,12 @@ export default function App() {
    {
     path: "/login",
     element: <LoginPage></LoginPage>,
+    //RegisterPage
+  },
+   {
+    path: "/register",
+    element: <RegisterPage></RegisterPage>,
+    //RegisterPage
   },
   ]);
   return (
