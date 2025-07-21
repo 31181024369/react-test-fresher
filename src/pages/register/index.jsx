@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Button, Checkbox, Form, Input, message, notification } from 'antd';
+import { Button, Checkbox, Divider, Form, Input, message, notification } from 'antd';
 import './register.css'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { callRegister } from '../../services/api';
 const RegisterPage=()=>{
     const [isSubmit,setIsSubmit]=useState(false);
@@ -21,7 +21,7 @@ const RegisterPage=()=>{
     }else{
         notification.error({
             message:"error",
-            description:res.message &&res.message.length>0?res.message[0]:res.message,
+            description:res.message && Array.isArray(res.message)?res.message[0]:res.message,
             duration:5
         })
     }
@@ -33,13 +33,13 @@ const onFinishFailed = errorInfo => {
 };
 
     return (
-      
         <div className='register-form' style={{maxWidth: 600,margin: "60px auto",padding: "30px",
             background: "#ffffff",
     borderRadius: "10px",
     boxShadow: "10px 5px 5px #e9e8e8"
         }}>
         <h1>Đăng kí tài khoản</h1>
+        <Divider />
          <Form
          layout="vertical"
     name="basic"
@@ -90,6 +90,13 @@ const onFinishFailed = errorInfo => {
       </Button>
     </Form.Item>
   </Form>
+   <Divider>Or</Divider>
+   <div>
+     <span>Chưa có tài khoản?</span>
+     <Link to="/login" style={{textDecoration: "none",
+    color: "#4096ff",
+    paddingLeft: "5px"}}>đăng nhập</Link>
+   </div>
   
         </div>
     )

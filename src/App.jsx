@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   createBrowserRouter,
@@ -11,6 +11,14 @@ import Footed from './components/footed';
 import Header from './components/header';
 import Home from './components/home';
 import RegisterPage from './pages/register';
+import { callFetchAccount } from './services/api';
+import { useSelector, useDispatch } from 'react-redux'
+import { doGetAccountAction } from './redux/account/accountSlice';
+import NotFound from './components/notfound';
+import Loading from './components/loading';
+import AdminPage from './pages/admin';
+import ProtectedRoute from './components/ProtectedRoute';
+
 const Layout=()=>{
   return (
     <div className='layout-app'>
@@ -20,12 +28,44 @@ const Layout=()=>{
     </div>
   )
 }
+const LayoutAdmin=()=>{
+  const isAdminRoute=window.location.pathname.startsWith('/admin');
+  const user=useSelector(state=>state.account.user);
+  const userRole=user.role.name;
+  // console.log("data userRole:",userRole);
+  console.log("data admin Role:",userRole);
+  return (
+    <>
+     {isAdminRoute && userRole ==='SUPER_ADMIN' && <Header></Header>}
+      <Outlet />
+     {isAdminRoute && userRole ==='SUPER_ADMIN' && <Header></Header>}
+    </>
+   
+  )
+}
 export default function App() {
+  const dispatch=useDispatch();
+  const isAuthenticated=useSelector(state=>state.account.isAuthenticated);
+  const getAccount=async()=>{
+    if(window.location.pathname==='/login'
+      || window.location.pathname==='/register'
+      || window.location.pathname==='/'
+    ) return;
+    const res=await callFetchAccount();
+    if(res && res.data){
+      dispatch(doGetAccountAction(res.data.user));
+      console.log("data fetch data:",res.data.user);
+    }
+   
+  }
+  useEffect(()=>{
+    getAccount();
+  },[])
   const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout></Layout>,
-    errorElement: <div>404 not found</div>,
+    errorElement: <NotFound></NotFound>,
     children: [
       {
         path: "contacts",
@@ -34,6 +74,20 @@ export default function App() {
      { index: true, element: <Home /> },
     ],
   },
+   {
+    path: "/admin",
+    element: <LayoutAdmin></LayoutAdmin>,
+    errorElement: <NotFound></NotFound>,
+    children: [
+      
+     { index: true, element:
+      <ProtectedRoute>
+        <AdminPage />
+      // </ProtectedRoute>
+     },
+    ],
+  },
+
    {
     path: "/login",
     element: <LoginPage></LoginPage>,
@@ -46,6 +100,17 @@ export default function App() {
   },
   ]);
   return (
-     <RouterProvider router={router} />
+    <>
+    {/* <RouterProvider router={router} /> */}
+    {isAuthenticated===true || window.location.pathname==='/login'
+    ||window.location.pathname==='/register'
+    || window.location.pathname==='/'
+     ?
+        <RouterProvider router={router} />
+       :
+       <Loading></Loading>
+    }
+    </>
+
   )
 }

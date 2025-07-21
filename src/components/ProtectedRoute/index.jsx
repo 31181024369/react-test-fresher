@@ -1,0 +1,39 @@
+import { useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
+import NotPermitted from "./NotPermitted";
+
+
+const RoleBaseRoute=(props)=>{
+    const isAdminRoute=window.location.pathname.startsWith('/admin');
+    const user=useSelector(state=>state.account.user);
+  
+    const userRole=user.role.name;
+    console.log("userRole:",userRole);
+    if(isAdminRoute && userRole==='SUPER_ADMIN'){
+        return (<>{props.children}</>)
+    }else{
+        return (<NotPermitted></NotPermitted>)
+    }
+
+}
+const ProtectedRoute=(props)=>{
+    const isAuthenticated=useSelector(state=>state.account.isAuthenticated);
+    const user=useSelector(state=>state.account.user);
+    console.log("ProtectedRoute:",isAuthenticated)
+    console.log("useRedux:",user);
+    return (
+        <>
+        {
+            isAuthenticated === true ?
+            <>
+                <RoleBaseRoute>
+                    {props.children}
+                </RoleBaseRoute>
+            </>
+            :
+            <Navigate to='/login' replace />
+        }
+        </>
+    )
+}
+export default ProtectedRoute
