@@ -18,6 +18,7 @@ import NotFound from './components/notfound';
 import Loading from './components/loading';
 import AdminPage from './pages/admin';
 import ProtectedRoute from './components/ProtectedRoute';
+import LayoutAdmin from './components/admin/LayoutAdmin';
 
 const Layout=()=>{
   return (
@@ -28,28 +29,27 @@ const Layout=()=>{
     </div>
   )
 }
-const LayoutAdmin=()=>{
-  const isAdminRoute=window.location.pathname.startsWith('/admin');
-  const user=useSelector(state=>state.account.user);
-  const userRole=user.role.name;
-  // console.log("data userRole:",userRole);
-  console.log("data admin Role:",userRole);
-  return (
-    <>
-     {isAdminRoute && userRole ==='SUPER_ADMIN' && <Header></Header>}
-      <Outlet />
-     {isAdminRoute && userRole ==='SUPER_ADMIN' && <Header></Header>}
-    </>
-   
-  )
-}
+// const LayoutAdmin=()=>{
+//   const isAdminRoute=window.location.pathname.startsWith('/admin');
+//   const user=useSelector(state=>state.account.user);
+//   const userRole=user.role.name;
+//   // console.log("data userRole:",userRole);
+//   console.log("data admin Role:",userRole);
+//   return (
+//     <>
+//      {isAdminRoute && userRole ==='SUPER_ADMIN' && <Header></Header>}
+//       <Outlet />
+//      {isAdminRoute && userRole ==='SUPER_ADMIN' && <Header></Header>}
+//     </>
+//   )
+// }
 export default function App() {
   const dispatch=useDispatch();
   const isAuthenticated=useSelector(state=>state.account.isAuthenticated);
+  const isLoading=useSelector(state=>state.account.isLoading);
   const getAccount=async()=>{
     if(window.location.pathname==='/login'
       || window.location.pathname==='/register'
-      || window.location.pathname==='/'
     ) return;
     const res=await callFetchAccount();
     if(res && res.data){
@@ -76,14 +76,14 @@ export default function App() {
   },
    {
     path: "/admin",
-    element: <LayoutAdmin></LayoutAdmin>,
+    element:<LayoutAdmin></LayoutAdmin>,
     errorElement: <NotFound></NotFound>,
     children: [
       
      { index: true, element:
       <ProtectedRoute>
         <AdminPage />
-      // </ProtectedRoute>
+      </ProtectedRoute>
      },
     ],
   },
@@ -102,7 +102,7 @@ export default function App() {
   return (
     <>
     {/* <RouterProvider router={router} /> */}
-    {isAuthenticated===true || window.location.pathname==='/login'
+    {isLoading===false || window.location.pathname==='/login'
     ||window.location.pathname==='/register'
     || window.location.pathname==='/'
      ?

@@ -9,8 +9,12 @@ const callLogin=(username,password)=>{
 const callFetchAccount=()=>{
     return axios.get('/api/v1/auth/account');
 }
+const callLogout=()=>{
+    return axios.get('/api/v1/auth/logout');
+}
 export {
     callRegister,
     callLogin,
-    callFetchAccount
+    callFetchAccount,
+    callLogout
 }

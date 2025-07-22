@@ -1,7 +1,9 @@
 const Footed=()=>{
     return (
         <>
-        footed
+        <div className="footed" style={{ textAlign: 'center' }}>
+            React Text Fresher © Hỏi dân it
+        </div>
         </>
     )
 }

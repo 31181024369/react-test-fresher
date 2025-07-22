@@ -1,7 +1,10 @@
 const Home=()=>{
     return (
         <>
-        Home
+        <div className="home-page" style={{height:"650px"}}>
+            Home
+        </div>
+       
         </>
     )
 }

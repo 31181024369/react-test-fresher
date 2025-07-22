@@ -1,0 +1,36 @@
+.header{
+    width: 1300px;
+    margin: 0px auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.img-logo{
+    width: 12%;
+    display: flex;
+    justify-content: space-between;
+}
+.search{
+    width: 58%;
+    
+}
+.search{
+    position: relative;
+}
+.icon-search{
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    color: aqua;
+    width: 28px;
+    height: 20px;
+}
+.badge-cart{
+    width: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.dropdown{
+    width: 20%;
+}
