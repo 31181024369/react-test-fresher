@@ -8,10 +8,11 @@ import { IoIosSearch } from "react-icons/io";
 import "./header.css";
 import { useDispatch, useSelector } from "react-redux";
 import { callLogout } from "../../services/api";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { doLogoutAction } from "../../redux/account/accountSlice";
 const Header=()=>{
     const user=useSelector(state=>state.account.user);
+    const isAuthenticated=useSelector(state=>state.account.isAuthenticated);
     console.log("user:",user);
     const dispatch=useDispatch();
     const navigate=useNavigate();
@@ -28,18 +29,22 @@ const Header=()=>{
     };
     const items = [
         {
-            label: '1st menu item',
-            key: '1',
+            label: <label style={{ cursor: 'pointer' }}>Quản lý tài khoản</label>,
+            key: 'account',
+
         },
         {
             label: <label style={{cursor:'pointer'}} onClick={()=>handleLogout()}>đăng xuất</label>,
             key: 'logout',
         },
-        {
-            label: '3rd menu item',
-            key: '3',
-        },
     ];
+    if(user?.role.name==='SUPER_ADMIN'){
+        items.unshift({
+            label:<Link to="/admin">Trang quản trị</Link>,
+            key: 'admin',
+        })
+    }
+    const urlAvatar = `https://admin.vitinhnguyenkim.com.vn/static/media/nk_vien.4b5456ad33f19bdd86ae.png`;
     return (
         <>
         <div className="header">
@@ -72,9 +77,17 @@ const Header=()=>{
                 <Dropdown menu={{ items, onClick }}>
                     <a onClick={e => e.preventDefault()}>
                     <Space>
-                        {user && user.email!=="" ? `Welcome, ${user.email}`:"Tài khoản"}
-                       
-                        <DownOutlined />
+                          {!isAuthenticated ?
+                                    <span onClick={() => navigate('/login')}> Tài Khoản</span>
+                                    :
+                                    <Dropdown menu={{ items }} trigger={['click']}>
+                                        <Space >
+                                            <Avatar src={urlAvatar} />
+                                            {user?.fullName}
+                                        </Space>
+                                    </Dropdown>
+                                }
+
                     </Space>
                     </a>
                 </Dropdown>

@@ -19,6 +19,7 @@ import Loading from './components/loading';
 import AdminPage from './pages/admin';
 import ProtectedRoute from './components/ProtectedRoute';
 import LayoutAdmin from './components/admin/LayoutAdmin';
+import ManageUser from './pages/admin/user';
 
 const Layout=()=>{
   return (
@@ -85,6 +86,10 @@ export default function App() {
         <AdminPage />
       </ProtectedRoute>
      },
+     {
+        path: "user",
+        element: <ManageUser />,
+      },
     ],
   },
 

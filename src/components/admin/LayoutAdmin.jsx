@@ -10,7 +10,7 @@ import {
   UserOutlined,
   VideoCameraOutlined,
 } from '@ant-design/icons';
-import { Button, Layout, Menu, theme } from 'antd';
+import { Avatar, Button, Layout, Menu, theme } from 'antd';
 const { Header, Sider, Content,Footer } = Layout;
 import { DownOutlined } from '@ant-design/icons';
 import { Dropdown, message, Space } from 'antd'
@@ -56,6 +56,7 @@ const dispatch=useDispatch();
         },
 
     ];
+    const urlAvatar = `https://admin.vitinhnguyenkim.com.vn/static/media/nk_vien.4b5456ad33f19bdd86ae.png`;
     return (
         <>
         <Layout>
@@ -121,7 +122,12 @@ const dispatch=useDispatch();
           <Dropdown menu={{ items, onClick }}>
             <a onClick={e => e.preventDefault()}>
             <Space>
-                welcome, {user?.name}
+                {/* welcome, {user?.name} */}
+                <Space style={{ cursor: "pointer" }}>
+                            <Avatar src={urlAvatar} />
+                            {user?.name}
+                        </Space>
+
                 <DownOutlined />
             </Space>
             </a>
